@@ -95,6 +95,7 @@ $("#dos").html(html);
 $(window).ready(function(){
 $("#tcomentario").hide();
 $("#comentar").hide();
+$("#lablog").hide();
 $("#flag").click(function() {
 visitado(function(){
 $("#flag").css("color","#40FF00");
@@ -115,6 +116,10 @@ $("#dos").hide();
       		if(obtenerCookie("token") != ""){
 				$("#tcomentario").show();
 				$("#comentar").show();
+				$("#lablog").show();
+				$("#labnolog").hide();
+
+
       			$.ajax({
                                                   		type: 'GET',
                                                   		url: url,
@@ -175,7 +180,7 @@ $("#dos").hide();
                                                                                            		headers:{"X-Auth-Token":obtenerCookie("token")},
                                                                                            		data:{
                                                                                            			pointid: id,
-                                                                                           			text: $("#comment").val()
+                                                                                           			text: $("#tcomentario").val()
                                                                                            		}
                                                                                            	}).done(function(data) {
                                                                                            		console.log(data);
