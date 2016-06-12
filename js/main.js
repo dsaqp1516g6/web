@@ -7,30 +7,38 @@ var baseUrl = "http://localhost:8080/secretsites";
 
   function isLoged(){
   var a = false;
-  		if(obtenerCookie("token") != undefined ){
-  		if(obtenerCookie("token") != ""){
-  			console.log("ola");
-  			$("#nologed").hide();
-  			$("#loged").show();
-  			a = true;
-  			}
-  		}
-  		if(a){
-  			$.ajax({
-        				type: 'GET',
-        				url: baseUrl  + "/users/" + obtenerCookie("id")
-        			}).done(function(data) {
-        				console.log(data);
-        				$("#loged").html("<li class=\"dropdown\"><div style='float:left'>" + data.fullname + "</div> <a style='float:right; padding:0; margin-left: 10px;' id='logout'>Logout</<a></li>");
-        			}).fail(function(error){
-        				alert(JSON.stringify(error));
-        			});
-  		}else{
-  		$("#nologed").show();
-          			$("#loged").hide();
-  		}
+  		if(obtenerCookie("token") != "undefined" ) {
+			if(obtenerCookie("token") != ""){
+				console.log("ola");
+				$("#nologed").hide();
+				$("#loged").show();
+				a = true;
+				}
+			}
+			if(a){
+				$.ajax({
+							type: 'GET',
+							url: baseUrl  + "/users/" + obtenerCookie("id")
+						}).done(function(data) {
+							console.log(data);
+							$("#loged").html("<li class=\"dropdown\"><div style='float:left'>" + data.fullname + "</div> <a style='float:right; padding:0; margin-left: 10px;' id='logout'>Logout</<a></li>");
+						}).fail(function(error){
+							console.log("HOLA");
+							alert(JSON.stringify(error));
+						});
+			} else{
+			$("#nologed").show();
+			$("#loged").hide();
+			}
   	}
 $(document).ready(function() {
+/*google.maps.event.addListener(map, "click", function (e) {
+
+    //lat and lng is available in e object
+    var latLng = e.latLng;
+console.log(e);
+});*/
+$("#marcador").hide();
 	isLoged();
 
 	$('#loged').on('click', '#logout', function() {
@@ -46,10 +54,43 @@ $(document).ready(function() {
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 	map = new google.maps.Map($("#map-canvas").get(0), myOptions);
-	
+
+	google.maps.event.addListener(map, "click", function (e) {
+
+        //lat and lng is available in e object
+        var latLng = e.latLng;
+    var longitude=console.log(e.latLng.lat());
+    var latitude=console.log(e.latLng.lng());
+    $("#vlatitude").val(""+latitude+"");
+    $("#vlongitude").val(""+longitude+"");
+
+    });
+
 	//getAllPoints();
 	getMyLocation();
-	
+
+	$("#anadirpunto").click(function() {
+    	ponerpunto();
+        	});
+
+	function ponerpunto(){
+            var url = "http://localhost:8080/secretsites/interestpoints";
+            	$.ajax({
+                		type: 'POST',
+                		url: url,
+                		contentType: 'application/x-www-form-urlencoded',
+                		headers:{"X-Auth-Token":obtenerCookie("token")},
+                		data:{
+                			name: $("#namepoint").val(),
+                			longitude: longitude,
+                			latitude: latitude
+                		}
+                	}).done(function(data) {
+                		console.log(data);
+                		location.reload();
+                	}).fail(function(error){
+                		alert(JSON.stringify(error));
+                	});}
 
 	$("#hideArrow").click(function() {
 		$("#left").toggle(100);
@@ -141,6 +182,10 @@ $(document).ready(function() {
 		});
 	}
 
+	$("#localizar").click(function() {
+	getMyLocation();
+    	});
+
 	function getMyLocation() {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
@@ -179,11 +224,17 @@ $(document).ready(function() {
             		crearCookie("token", data.token, 12);
             		crearCookie("id", data.userid, 12);
             		isLoged();
+            		location.reload();
             	}).fail(function(error){
             		alert(JSON.stringify(error));
             	});
 
+
          }
+         $( "#homepage" ).click(function() {
+         			 console.log("ola");
+                });
+
 		  $( "#regbtn" ).click(function() {
 			 register();
        });
@@ -205,6 +256,7 @@ $(document).ready(function() {
 							crearCookie("token", data.token, 12);
 							crearCookie("id", data.userid, 12);
 							isLoged();
+							location.reload();
                      	}).fail(function(error){
                      		alert(JSON.stringify(error));
                      	});
@@ -232,7 +284,28 @@ $(document).ready(function() {
                               		alert(JSON.stringify(error));
                               	});
 
+
+
+                                   /*$("#flag").click(function() {
+                                    $("#flag").css("color","#40FF00");
+
+                                   }
+
+
+                                   $("#corazon").click(function() {
+                                   console.log("ola");
+                                    $("#corazon").css("color","#40FF00");
+                                            }*/
+
+
+
                            }
+
+                            $( "#punto" ).click(function() {
+                            $("#marcador").show();
+                           			 //ponerpunto();
+                                  });
+
 	/*
 	
 		var clickEvent = google.maps.event.addListener(map, 'click', function(e) {
