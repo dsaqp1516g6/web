@@ -3,6 +3,8 @@ var map;
 var urlMaps = "http://localhost:8080/secretsites/apimaps/";
 var urlPoints = "http://localhost:8080/secretsites/interestpoints";
 var baseUrl = "http://localhost:8080/secretsites";
+var longitude;
+var latitude;
 
 
   function isLoged(){
@@ -12,6 +14,7 @@ var baseUrl = "http://localhost:8080/secretsites";
 				console.log("ola");
 				$("#nologed").hide();
 				$("#loged").show();
+				$("#punto").show();
 				a = true;
 				}
 			}
@@ -39,6 +42,7 @@ $(document).ready(function() {
 console.log(e);
 });*/
 $("#marcador").hide();
+$("#punto").hide();
 	isLoged();
 
 	$('#loged').on('click', '#logout', function() {
@@ -58,11 +62,13 @@ $("#marcador").hide();
 	google.maps.event.addListener(map, "click", function (e) {
 
         //lat and lng is available in e object
-        var latLng = e.latLng;
-    var longitude=console.log(e.latLng.lat());
-    var latitude=console.log(e.latLng.lng());
-    $("#vlatitude").val(""+latitude+"");
-    $("#vlongitude").val(""+longitude+"");
+        var latLng = e.latLng;		
+		console.log(e.latLng.lat());
+		console.log(e.latLng.lng());
+    longitude=e.latLng.lng();
+    latitude=e.latLng.lat();
+    $("#vlatitude").text(""+latitude+"");
+    $("#vlongitude").text(""+longitude+"");
 
     });
 

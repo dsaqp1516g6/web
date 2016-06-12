@@ -93,6 +93,8 @@ console.log(html);
 $("#dos").html(html);
  }
 $(window).ready(function(){
+$("#tcomentario").hide();
+$("#comentar").hide();
 $("#flag").click(function() {
 visitado(function(){
 $("#flag").css("color","#40FF00");
@@ -111,6 +113,8 @@ $("#dos").hide();
 	var url = "http://localhost:8080/secretsites/interestpoints/" + location.href.split('=')[1];
 	if(obtenerCookie("token") != undefined ){
       		if(obtenerCookie("token") != ""){
+				$("#tcomentario").show();
+				$("#comentar").show();
       			$.ajax({
                                                   		type: 'GET',
                                                   		url: url,
