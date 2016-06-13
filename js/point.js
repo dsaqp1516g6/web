@@ -8,7 +8,7 @@ $(document).ready(function() {
 
  getComentarios(){
  $.ajax({
-  var url = "http://localhost:8080/secretsites/comments/interestpoint/"+id"";
+  var url = "http://eetacdsa2c.upc.es:8085/secretsites/comments/interestpoint/"+id"";
          		type: 'GET',
          		url: url
          	}).done(function(data) {
@@ -19,7 +19,7 @@ $(document).ready(function() {
  }
 
                              function pendiente(){
-                                                                    var url = "http://localhost:8080/secretsites/status";
+                                                                    var url = "http://eetacdsa2c.upc.es:8085/secretsites/status";
                                                                     	$.ajax({
                                                                         		type: 'POST',
                                                                         		url: url,

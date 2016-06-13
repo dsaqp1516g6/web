@@ -3,7 +3,7 @@ $(document).ready(function() {
 	
 	var ssPoints = [];
 	
-	$.get("http://localhost:8080/secretsites/interestpoints").done(function(points) {
+	$.get("http://eetacdsa2c.upc.es:8085/secretsites/interestpoints").done(function(points) {
 		ssPoints = points.interestPoints;
 		var i = 0;
 		var html = "";
@@ -36,7 +36,7 @@ $(document).ready(function() {
 		
 		$(".btn-danger").click(function() {
 			var id =  $(this).val();
-			var url = "http://localhost:8080/secretsites/interestpoints/" + ssPoints[$(this).val()].id;
+			var url = "http://eetacdsa2c.upc.es:8085/secretsites/interestpoints/" + ssPoints[$(this).val()].id;
 			$.ajax({
 				type: 'DELETE',
 				url: url
@@ -49,7 +49,7 @@ $(document).ready(function() {
 		
 		$(".btn-succes").click(function() {
 			var id = $(this).val();
-			var url = "http://localhost:8080/secretsites/interestpoints/" + ssPoints[id].id;
+			var url = "http://eetacdsa2c.upc.es:8085/secretsites/interestpoints/" + ssPoints[id].id;
 			var pointsData = '{' + 
 				'"links": null,' +
 				'"id":"' + ssPoints[id].id + '",' +

@@ -1,8 +1,8 @@
 
 var map;
-var urlMaps = "http://localhost:8080/secretsites/apimaps/";
-var urlPoints = "http://localhost:8080/secretsites/interestpoints";
-var baseUrl = "http://localhost:8080/secretsites";
+var urlMaps = "http://eetacdsa2c.upc.es:8085/secretsites/apimaps/";
+var urlPoints = "http://eetacdsa2c.upc.es:8085/secretsites/interestpoints";
+var baseUrl = "http://eetacdsa2c.upc.es:8085/secretsites";
 var longitude;
 var latitude;
 
@@ -34,6 +34,7 @@ var latitude;
 			$("#loged").hide();
 			}
   	}
+
 $(document).ready(function() {
 /*google.maps.event.addListener(map, "click", function (e) {
 
@@ -42,13 +43,15 @@ $(document).ready(function() {
 console.log(e);
 });*/
 $("#marcador").hide();
-$("#punto").hide();
+$("#puntos").hide();
+
 	isLoged();
 
 	$('#loged').on('click', '#logout', function() {
     	console.log("pepe");
     	crearCookie("token", "");
     	isLoged();
+    	location.reload();
     });
 	$("#showArrow").hide();
 	var myLatlng = new google.maps.LatLng(41.3871734, 2.0850284);
@@ -75,12 +78,17 @@ $("#punto").hide();
 	//getAllPoints();
 	getMyLocation();
 
+	$("#punto").click(function() {
+	$("#puntos").show();
+
+        	});
+
 	$("#anadirpunto").click(function() {
     	ponerpunto();
         	});
 
 	function ponerpunto(){
-            var url = "http://localhost:8080/secretsites/interestpoints";
+            var url = "http://eetacdsa2c.upc.es:8085/secretsites/interestpoints";
             	$.ajax({
                 		type: 'POST',
                 		url: url,
@@ -216,7 +224,7 @@ $("#punto").hide();
 			login();
        });
         function login(){
-        var url = "http://localhost:8080/secretsites/login";
+        var url = "http://eetacdsa2c.upc.es:8085/secretsites/login";
         	$.ajax({
             		type: 'POST',
             		url: url,
@@ -245,7 +253,7 @@ $("#punto").hide();
 			 register();
        });
            function register(){
-                 var url = "http://localhost:8080/secretsites/users";
+                 var url = "http://eetacdsa2c.upc.es:8085/secretsites/users";
                  if($("#passwordReg").val() == $("#passwordRegR").val()){
                  	$.ajax({
                      		type: 'POST',
@@ -273,7 +281,7 @@ $("#punto").hide();
 
                   }
                     function viewpoint(){
-                          var url = "http://localhost:8080/secretsites/interestpoints/";
+                          var url = "http://eetacdsa2c.upc.es:8085/secretsites/interestpoints/";
                           	$.ajax({
                               		type: 'POST',
                               		url: url,
@@ -311,6 +319,11 @@ $("#punto").hide();
                             $("#marcador").show();
                            			 //ponerpunto();
                                   });
+
+                                  $("#searchBut").click(function() {
+                                  $("#puntos").hide();
+                                  });
+
 
 	/*
 	

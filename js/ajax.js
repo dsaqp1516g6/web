@@ -8,7 +8,7 @@ function ajaxGet(getUrl) {
 		alert(JSON.stringify(error));
 	});
 }
-var id,status;
+var id,status,purl;
 function getcomentarios(data){
 var html="";
                                   		for(var i=0; i< data.comments.comments.length;i++){
@@ -28,7 +28,7 @@ var html="";
                                   		$("#comentarios").html(html);
 }
 function visitado(callback){
-                                   var url = "http://localhost:8080/secretsites/interestpoints/status";
+                                   var url = "http://eetacdsa2c.upc.es:8085/secretsites/interestpoints/status";
                                    	$.ajax({
                                        		type: 'POST',
                                        		url: url,
@@ -50,7 +50,7 @@ function visitado(callback){
 
  }
  function pendiente(callback){
-                                   var url = "http://localhost:8080/secretsites/interestpoints/status";
+                                   var url = "http://eetacdsa2c.upc.es:8085/secretsites/interestpoints/status";
                                    	$.ajax({
                                        		type: 'POST',
                                        		url: url,
@@ -69,11 +69,30 @@ function visitado(callback){
                                        	callback();
 
  }
+
+ function borrarpunto(callback){
+                                   var url = "http://eetacdsa2c.upc.es:8085/secretsites/interestpoints";
+                                   	$.ajax({
+                                       		type: 'DELETE',
+                                       		url: url,
+                                       		contentType: 'application/x-www-form-urlencoded',
+                                       		headers:{"X-Auth-Token":obtenerCookie("token")},
+                                       		data:{
+                                       			id: id
+                                       		}
+                                       	}).done(function(data) {
+                                       		console.log(data);
+                                       		location.reload();
+                                       	}).fail(function(error){
+                                       		alert(JSON.stringify(error));
+                                       	});
+                                       	callback();
+
+ }
  function info(data){
 $("#nombre").html(data.name);
 $("#estrellas").html(data.rating);
-$("#foto").html("<img src=\"http://localhost:8080/"+data.bestPhoto.url+"\" width=\"100%\" onerror=\"if (this.src != '404.png') this.src = '404.png';\">");
-
+$("#foto").html("<img src=\"http://eetacdsa2c.upc.es:8085/"+purl+"\" width=\"100%\" onerror=\"if (this.src != '404.png') this.src = '404.png';\">");
 
 var uno = '<ol class="carousel-indicators">';
 var dos = '';
@@ -81,9 +100,9 @@ var cuatro = '';
 for(var i = 0; i < data.photos.photos.length; i++){
  dos+='<li data-target="#dos" data-slide-to="'+i+'" class="active"></li>';
  if(i==0){
-  cuatro +=  '<div class="item active"> <img src="http://localhost:8080/'+data.photos.photos[i].url+'" alt="" onerror="if(this.src != \'404.png\') this.src = \'404.png\';"> </div>';
+  cuatro +=  '<div class="item active"> <img src="http://eetacdsa2c.upc.es:8085/'+purl+'" alt=" if(this.src != \'404.png\') this.src = \'404.png\';"> </div>';
  }else{
-  cuatro +=  '<div class="item"> <img src="http://localhost:8080/'+data.photos.photos[i].url+'" alt="" onerror="if(this.src != \'404.png\') this.src = \'404.png\';"> </div>';
+  cuatro +=  '<div class="item"> <img src="http://eetacdsa2c.upc.es:8085/'+purl+'" alt="" onerror="if(this.src != \'404.png\') this.src = \'404.png\';"> </div>';
  }
 }
 var tres = '</ol> <!-- Wrapper for slides --> <div class="carousel-inner" role="listbox">';
@@ -94,7 +113,10 @@ $("#dos").html(html);
  }
 $(window).ready(function(){
 $("#tcomentario").hide();
+$("#papelera").hide();
 $("#comentar").hide();
+$("#coment2").show();
+$("#coment").hide();
 $("#lablog").hide();
 $("#flag").click(function() {
 visitado(function(){
@@ -109,13 +131,15 @@ $("#flag").css("color","#40FF00");
        			 console.log("ola");
               });
 $("#dos").hide();
-	console.log(location.href.split('=')[1]);
+	id =location.href.split('=')[1];
+	console.log(id);
 
-	var url = "http://localhost:8080/secretsites/interestpoints/" + location.href.split('=')[1];
+	var url = "http://eetacdsa2c.upc.es:8085/secretsites/interestpoints/" + location.href.split('=')[1];
 	if(obtenerCookie("token") != undefined ){
       		if(obtenerCookie("token") != ""){
 				$("#tcomentario").show();
 				$("#comentar").show();
+				$("#coment").show();
 				$("#lablog").show();
 				$("#labnolog").hide();
 
@@ -129,6 +153,7 @@ $("#dos").hide();
                                                   		getcomentarios(data);
                                                   		info(data);
                                                   		status=data.status;
+                                                  		purl=data.bestPhoto.id + ".png";
                                                   		if(data.status=="visited"){
                                                   		$("#flag").css("color","#40FF00");
 
@@ -171,28 +196,34 @@ $("#dos").hide();
                                                    		location.href = "/";
                                                    	});}
 
-                                                   	function comentario(){
-                                                                                       var url = "http://localhost:8080/secretsites/comments";
-                                                                                       	$.ajax({
-                                                                                           		type: 'POST',
-                                                                                           		url: url,
-                                                                                           		contentType: 'application/x-www-form-urlencoded',
-                                                                                           		headers:{"X-Auth-Token":obtenerCookie("token")},
-                                                                                           		data:{
-                                                                                           			pointid: id,
-                                                                                           			text: $("#tcomentario").val()
-                                                                                           		}
-                                                                                           	}).done(function(data) {
-                                                                                           		console.log(data);
-                                                                                           		location.reload();
-                                                                                           	}).fail(function(error){
-                                                                                           		alert(JSON.stringify(error));
-                                                                                           	});
 
-                                                     }
                                                      $("#comentar").click(function(){
                                                      comentario();
                                                      })
+
+                                                     function comentario(data){
+                                                                                                                                            var url = "http://eetacdsa2c.upc.es:8085/secretsites/comments";
+                                                                                                                                            	$.ajax({
+                                                                                                                                                		type: 'POST',
+                                                                                                                                                		url: url,
+                                                                                                                                                		contentType: 'application/x-www-form-urlencoded',
+                                                                                                                                                		headers:{"X-Auth-Token":obtenerCookie("token")},
+                                                                                                                                                		data:{
+                                                                                                                                                			pointid: id,
+                                                                                                                                                			text: $("#tcomentario").val()
+                                                                                                                                                		}
+                                                                                                                                                	}).done(function(data) {
+                                                                                                                                                		console.log(data);
+                                                                                                                                                		location.reload();
+                                                                                                                                                	}).fail(function(error){
+                                                                                                                                                		alert(JSON.stringify(error));
+                                                                                                                                                	});
+
+                                                                                                          }
+
+                                                     $( "#papelera" ).click(function() {
+                                                       borrarpunto();
+                                                      });
 
 
 

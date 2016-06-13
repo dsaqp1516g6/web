@@ -4,7 +4,7 @@ $(document).ready(function() {
 	$('#login').submit(function(e) {
 		var userData = new FormData($(this));
 		$.ajax({
-			url: 'http://localhost:8080/secretsites/login',
+			url: 'http://eetacdsa2c.upc.es:8085/secretsites/login',
 			type: 'POST',
 			crossDomain : true,
 			data: userData,
